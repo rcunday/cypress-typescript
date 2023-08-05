@@ -1,50 +1,53 @@
-import { v4 } from 'uuid';
+import { v4 as uuid } from "uuid";
+
+import adminClient from '../support/util/AdminClient'
 import LoginPage from '../support/pages/LoginPage'
-import { keycloakBefore } from "../support/util/keycloak_hooks";
+import { keycloakBefore } from '../support/util/keycloak_hooks'
+import SidebarPage from '../support/pages/SidebarPage'
+import CreateUserPage from '../support/pages/manage/users/CreateUserPage'
 
-import KcAdminClient from '@keycloak/keycloak-admin-client';
-const kcAdminClient = new KcAdminClient({
-    baseUrl: "http://localhost:8080"
-});
+let groupsList: string[] = []
+let itemId = "user_crud";
 
-let groupName = "group"
-let groupsList: string[] = [];
-
-async function authClient(username: string, password: string) {
-    await kcAdminClient.auth({
-        username: username,
-        password: password,
-        grantType: 'password',
-        clientId: 'admin-cli',
-        totp: '123456', // optional Time-based One-time Password if OTP is required in authentication flow
+describe('User Creation', () => {
+  const loginPage = new LoginPage()
+  const sidebarPage = new SidebarPage()
+  const createUserPage = new CreateUserPage()
+  before(() => {
+    cy.wrap(null).then(async () => adminClient.loginUser('admin', 'admin', 'admin-cli'))
+    cy.wrap(null).then(async () => {
+      groupsList = await adminClient.createUniqueGroups(2)
     })
-}
+  })
 
-async function createGroups() {
-    for (let i = 0; i <= 2; i++) {
-        groupName += "_" + v4();
-        await kcAdminClient.groups.create({
-            realm: 'master',
-            name: groupName
-        })
-        groupsList = [...groupsList, groupName];
-    }
-}
+  beforeEach(() => {
+    loginPage.logIn('admin', 'admin')
+    keycloakBefore()
+    sidebarPage.goToUsers()
+  })
 
-describe('auth keycloak api and create groups', () => {
-    before(() => {
-        cy.wrap(null).then(() => authClient('admin', 'admin'))
-        cy.wrap(null).then(() => createGroups())
-    })
+  after(() => adminClient.deleteGroups())
 
-    beforeEach(() => {
-        const loginPage = new LoginPage()
-        loginPage.logIn()
-        keycloakBefore()
-    })
+  it("Go to create User page", () => {
+    createUserPage.goToCreateUser()
+    cy.url().should("include", "users/add-user")
 
-    it('FINISHED LOGIN', () => {
-        cy.log('hello there')
-    })
+    // Verify Cancel button works
+    createUserPage.cancel();
+    cy.url().should("not.include", "/add-user")
+  })
 
+
+  it("Create user test", () => {
+    itemId += "_" + uuid();
+    // Create
+    createUserPage.goToCreateUser()
+    createUserPage.createUser(itemId)
+    createUserPage.save()
+  });
+
+
+  it('FINISHED LOGIN', () => {
+    cy.log('hello there')
+  })
 })

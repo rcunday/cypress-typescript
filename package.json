@@ -9,7 +9,8 @@
     "cy:verify": "cypress verify",
     "cy:info": "cypress info",
     "cy:version": "cypress version",
-    "cy:cache:list": "cypress cache list"
+    "cy:cache:list": "cypress cache list",
+    "lint": "npx eslint ."
   },
   "repository": {
     "type": "git",
@@ -26,13 +27,18 @@
   },
   "homepage": "https://github.com/rcunday/cypress-typescript#readme",
   "dependencies": {
-    "cypress-plugin-api": "^2.11.1",
     "@keycloak/keycloak-admin-client": "^17.0.0",
+    "cypress-plugin-api": "^2.11.1",
+    "lodash-es": "^4.17.21",
     "typescript": "^5.1.6",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@testing-library/cypress": "^9.0.0",
+    "@types/lodash-es": "^4.17.8",
     "@types/uuid": "^9.0.2",
-    "cypress": "^12.17.3"
+    "cypress": "^12.17.3",
+    "eslint-plugin-chai-friendly": "^0.7.2",
+    "eslint-plugin-cypress": "^2.13.3"
   }
 }
