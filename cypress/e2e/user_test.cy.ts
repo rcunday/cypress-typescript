@@ -1,5 +1,7 @@
 import { v4 } from 'uuid';
 import LoginPage from '../support/pages/LoginPage'
+import { keycloakBefore } from "../support/util/keycloak_hooks";
+
 import KcAdminClient from '@keycloak/keycloak-admin-client';
 const kcAdminClient = new KcAdminClient({
     baseUrl: "http://localhost:8080"
@@ -31,13 +33,14 @@ async function createGroups() {
 
 describe('auth keycloak api and create groups', () => {
     before(() => {
-        cy.wrap(null).then(() => authClient('admin','admin'))
+        cy.wrap(null).then(() => authClient('admin', 'admin'))
         cy.wrap(null).then(() => createGroups())
     })
 
     beforeEach(() => {
         const loginPage = new LoginPage()
         loginPage.logIn()
+        keycloakBefore()
     })
 
     it('FINISHED LOGIN', () => {
