@@ -1,0 +1,38 @@
+{
+  "name": "cypress-typescript",
+  "version": "1.0.0",
+  "description": "Sample Cypress using typescript",
+  "main": "index.js",
+  "scripts": {
+    "cy:run": "cypress run",
+    "cy:open": "cypress open",
+    "cy:verify": "cypress verify",
+    "cy:info": "cypress info",
+    "cy:version": "cypress version",
+    "cy:cache:list": "cypress cache list"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rcunday/cypress-typescript.git"
+  },
+  "keywords": [
+    "cypress",
+    "typescript"
+  ],
+  "author": "Richard Cunday",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rcunday/cypress-typescript/issues"
+  },
+  "homepage": "https://github.com/rcunday/cypress-typescript#readme",
+  "dependencies": {
+    "cypress-plugin-api": "^2.11.1",
+    "@keycloak/keycloak-admin-client": "^17.0.0",
+    "typescript": "^5.1.6",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.2",
+    "cypress": "^12.17.3"
+  }
+}
