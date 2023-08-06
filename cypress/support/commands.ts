@@ -25,5 +25,5 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 //import cypress-plugin-api - postman update
-import "cypress-plugin-api";
-import "@testing-library/cypress/add-commands";
+import 'cypress-plugin-api'
+import '@testing-library/cypress/add-commands'

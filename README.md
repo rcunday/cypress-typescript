@@ -20,7 +20,3 @@ npm install
 
 Start the Cypress Test Tool
 npm run cy:open
-
-
-
-
