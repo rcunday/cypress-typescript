@@ -10,6 +10,7 @@ import UserDetailsPage from '../support/pages/manage/users/user_details/UserDeta
 import CredentialsPage from '../support/pages/manage/users/CredentialsPage'
 import ListingPage from '../support/pages/ListingPage'
 import AttributesTab from '../support/pages/manage/AttributesTab'
+import UserGroupsPage from '../support/pages/manage/users/UserGroupsPage'
 
 let groupsList: string[] = []
 let itemId = 'user_crud'
@@ -23,6 +24,7 @@ describe('User Creation', () => {
   const credentialsPage = new CredentialsPage()
   const listingPage = new ListingPage()
   const attributesTab = new AttributesTab()
+  const userGroupsPage = new UserGroupsPage()
 
   let itemIdWithGroups = 'user_with_groups_crud'
   let itemIdWithCred = 'user_crud_cred'
@@ -162,7 +164,21 @@ describe('User Creation', () => {
     })
   })
 
-  it('FINISHED LOGIN', () => {
-    cy.log('hello there')
-  })
+  it("Add user to groups test", () => {
+    // Go to user groups
+    listingPage.searchItem(itemId).itemExist(itemId);
+    listingPage.goToItemDetails(itemId);
+
+    userGroupsPage.goToGroupsTab();
+    userGroupsPage.toggleAddGroupModal();
+
+    const groupsListCopy = groupsList.slice(0, 3);
+
+    groupsListCopy.forEach((element) => {
+      cy.findByTestId(`${element}-check`).click();
+    });
+
+    userGroupsPage.joinGroups();
+  });
+
 })
