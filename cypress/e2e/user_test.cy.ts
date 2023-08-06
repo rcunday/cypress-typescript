@@ -7,7 +7,8 @@ import SidebarPage from '../support/pages/SidebarPage'
 import CreateUserPage from '../support/pages/manage/users/CreateUserPage'
 import Masthead from '../support/pages/Masthead'
 import UserDetailsPage from '../support/pages/manage/users/user_details/UserDetailsPage'
-import CredentialsPage from "../support/pages/manage/users/CredentialsPage";
+import CredentialsPage from '../support/pages/manage/users/CredentialsPage'
+import ListingPage from '../support/pages/ListingPage'
 
 let groupsList: string[] = []
 let itemId = 'user_crud'
@@ -19,9 +20,10 @@ describe('User Creation', () => {
   const masthead = new Masthead()
   const userDetailsPage = new UserDetailsPage()
   const credentialsPage = new CredentialsPage()
+  const listingPage = new ListingPage()
 
-  let itemIdWithGroups = "user_with_groups_crud"
-  let itemIdWithCred = "user_crud_cred"
+  let itemIdWithGroups = 'user_with_groups_crud'
+  let itemIdWithCred = 'user_crud_cred'
 
   before(() => {
     cy.wrap(null).then(async () =>
@@ -55,10 +57,12 @@ describe('User Creation', () => {
     createUserPage.goToCreateUser()
     createUserPage.createUser(itemId)
     createUserPage.save()
-    masthead.checkNotificationMessage("The user has been created")
+    masthead.checkNotificationMessage(
+      'The user has been created',
+    )
   })
 
-  it("Create user with groups test", () => {
+  it('Create user with groups test', () => {
     itemIdWithGroups += uuid()
     // Add user from search bar
     createUserPage.goToCreateUser()
@@ -72,29 +76,42 @@ describe('User Creation', () => {
 
     createUserPage.joinGroups()
     createUserPage.save()
-    masthead.checkNotificationMessage("The user has been created")
+    masthead.checkNotificationMessage(
+      'The user has been created',
+    )
   })
 
-  it("Create user with credentials test", () => {
-    itemIdWithCred += "_" + uuid();
+  it('Create user with credentials test', () => {
+    itemIdWithCred += '_' + uuid()
 
     // Add user from search bar
-    createUserPage.goToCreateUser();
+    createUserPage.goToCreateUser()
 
-    createUserPage.createUser(itemIdWithCred);
+    createUserPage.createUser(itemIdWithCred)
 
-    userDetailsPage.fillUserData();
-    createUserPage.save();
-    masthead.checkNotificationMessage("The user has been created");
-    sidebarPage.waitForPageLoad();
+    userDetailsPage.fillUserData()
+    createUserPage.save()
+    masthead.checkNotificationMessage(
+      'The user has been created',
+    )
+    sidebarPage.waitForPageLoad()
 
     credentialsPage
       .goToCredentialsTab()
       .clickEmptyStatePasswordBtn()
       .fillPasswordForm()
       .clickConfirmationBtn()
-      .clickSetPasswordBtn();
-  });
+      .clickSetPasswordBtn()
+  })
+
+  it('Search existing user test', () => {
+    listingPage.searchItem(itemId).itemExist(itemId)
+  })
+
+  it('Search non-existing user test', () => {
+    listingPage.searchItem('user_DNE')
+    cy.findByTestId(listingPage.emptyState).should('exist')
+  })
 
   it('FINISHED LOGIN', () => {
     cy.log('hello there')

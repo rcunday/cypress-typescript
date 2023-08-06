@@ -111,8 +111,8 @@ export default class Masthead extends CommonElements {
       this.getAlertsContainer()
         .find(
           `button[title="` +
-          message.replaceAll('"', '\\"') +
-          `"]`,
+            message.replaceAll('"', '\\"') +
+            `"]`,
         )
         .last()
         .click({ force: true })
