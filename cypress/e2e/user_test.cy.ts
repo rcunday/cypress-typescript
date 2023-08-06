@@ -9,6 +9,7 @@ import Masthead from '../support/pages/Masthead'
 import UserDetailsPage from '../support/pages/manage/users/user_details/UserDetailsPage'
 import CredentialsPage from '../support/pages/manage/users/CredentialsPage'
 import ListingPage from '../support/pages/ListingPage'
+import AttributesTab from '../support/pages/manage/AttributesTab'
 
 let groupsList: string[] = []
 let itemId = 'user_crud'
@@ -21,6 +22,7 @@ describe('User Creation', () => {
   const userDetailsPage = new UserDetailsPage()
   const credentialsPage = new CredentialsPage()
   const listingPage = new ListingPage()
+  const attributesTab = new AttributesTab()
 
   let itemIdWithGroups = 'user_with_groups_crud'
   let itemIdWithCred = 'user_crud_cred'
@@ -111,6 +113,53 @@ describe('User Creation', () => {
   it('Search non-existing user test', () => {
     listingPage.searchItem('user_DNE')
     cy.findByTestId(listingPage.emptyState).should('exist')
+  })
+
+  it('User details test', () => {
+    sidebarPage.waitForPageLoad()
+    listingPage.searchItem(itemId).itemExist(itemId)
+    listingPage.goToItemDetails(itemId)
+    userDetailsPage.fillUserData().save()
+    masthead.checkNotificationMessage('The user has been saved')
+    sidebarPage.waitForPageLoad()
+    sidebarPage.goToUsers()
+    listingPage.searchItem(itemId).itemExist(itemId)
+  })
+
+  it('User attributes test', () => {
+    listingPage.goToItemDetails(itemId)
+    attributesTab
+      .goToAttributesTab()
+      .addAttribute('key', 'value')
+      .save()
+    masthead.checkNotificationMessage('The user has been saved')
+  })
+
+  it('User attributes with multiple values test', () => {
+    listingPage.searchItem(itemId).itemExist(itemId)
+    listingPage.goToItemDetails(itemId)
+    cy.intercept('PUT', `/admin/realms/master/users/*`).as(
+      'save-user',
+    )
+
+    const attributeKey = 'key-multiple'
+    attributesTab
+      .goToAttributesTab()
+      .addAttribute(attributeKey, 'other value')
+      .save()
+
+    masthead.checkNotificationMessage('The user has been saved')
+
+    cy.wait('@save-user').should(({ request, response }) => {
+      expect(response?.statusCode).to.equal(204)
+      expect(
+        request.body.attributes,
+        'response body',
+      ).deep.equal({
+        key: ['value'],
+        'key-multiple': ['other value'],
+      })
+    })
   })
 
   it('FINISHED LOGIN', () => {
