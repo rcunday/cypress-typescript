@@ -15,7 +15,7 @@ import ModalUtils from '../support/util/ModalUtils'
 
 let groupsList: string[] = []
 let itemId = 'user_crud'
-const itemCredential = 'Password';
+const itemCredential = 'Password'
 
 describe('User Creation', () => {
   const loginPage = new LoginPage()
@@ -216,20 +216,18 @@ describe('User Creation', () => {
     cy.findByTestId('empty-state').contains('No consents')
   })
 
-
-  it("Reset credential of User with empty state", () => {
+  it('Reset credential of User with empty state', () => {
     listingPage.goToItemDetails(itemId)
     credentialsPage
       .goToCredentialsTab()
       .clickEmptyStateResetBtn()
       .fillResetCredentialForm()
     masthead.checkNotificationMessage(
-      "Failed: Failed to send execute actions email",
+      'Failed: Failed to send execute actions email',
     )
   })
 
-
-  it("Reset credential of User with existing credentials", () => {
+  it('Reset credential of User with existing credentials', () => {
     listingPage.goToItemDetails(itemIdWithCred)
     credentialsPage
       .goToCredentialsTab()
@@ -237,24 +235,24 @@ describe('User Creation', () => {
       .fillResetCredentialForm()
 
     masthead.checkNotificationMessage(
-      "Failed: Failed to send execute actions email",
+      'Failed: Failed to send execute actions email',
     )
   })
 
-  it("Edit credential label", () => {
+  it('Edit credential label', () => {
     listingPage.goToItemDetails(itemIdWithCred)
     credentialsPage
       .goToCredentialsTab()
       .clickEditCredentialLabelBtn()
       .fillEditCredentialForm()
-      .clickEditConfirmationBtn();
+      .clickEditConfirmationBtn()
 
     masthead.checkNotificationMessage(
-      "The user label has been changed successfully.",
+      'The user label has been changed successfully.',
     )
   })
 
-  it("Show credential data dialog", () => {
+  it('Show credential data dialog', () => {
     listingPage.goToItemDetails(itemIdWithCred)
     credentialsPage
       .goToCredentialsTab()
@@ -262,53 +260,61 @@ describe('User Creation', () => {
       .clickCloseDataDialogBtn()
   })
 
-  it("Delete credential", () => {
-    listingPage.goToItemDetails(itemIdWithCred);
-    credentialsPage.goToCredentialsTab();
+  it('Delete credential', () => {
+    listingPage.goToItemDetails(itemIdWithCred)
+    credentialsPage.goToCredentialsTab()
 
-    cy.wait(2000);
-    listingPage.deleteItem(itemCredential);
-    modalUtils.checkModalTitle("Delete credentials?").confirmModal();
+    cy.wait(2000)
+    listingPage.deleteItem(itemCredential)
+    modalUtils
+      .checkModalTitle('Delete credentials?')
+      .confirmModal()
 
     masthead.checkNotificationMessage(
-      "The credentials has been deleted successfully.",
+      'The credentials has been deleted successfully.',
     )
   })
 
-  it("Delete user from search bar test", () => {
+  it('Delete user from search bar test', () => {
     // Delete
     sidebarPage.waitForPageLoad()
 
     listingPage.searchItem(itemId).itemExist(itemId)
     listingPage.deleteItemFromSearchBar(itemId)
 
-    modalUtils.checkModalTitle("Delete user?").confirmModal()
+    modalUtils.checkModalTitle('Delete user?').confirmModal()
 
-    masthead.checkNotificationMessage("The user has been deleted")
+    masthead.checkNotificationMessage(
+      'The user has been deleted',
+    )
     sidebarPage.waitForPageLoad()
 
     listingPage.itemExist(itemId, false)
   })
 
-  it("Delete user with groups test", () => {
+  it('Delete user with groups test', () => {
     // Delete
     listingPage.deleteItem(itemIdWithGroups)
 
-    modalUtils.checkModalTitle("Delete user?").confirmModal()
+    modalUtils.checkModalTitle('Delete user?').confirmModal()
 
-    masthead.checkNotificationMessage("The user has been deleted")
+    masthead.checkNotificationMessage(
+      'The user has been deleted',
+    )
     sidebarPage.waitForPageLoad()
 
     listingPage.itemExist(itemIdWithGroups, false)
   })
 
-  it("Delete user with credential test", () => {
+  it('Delete user with credential test', () => {
     // Delete
     listingPage.deleteItem(itemIdWithCred)
 
-    modalUtils.checkModalTitle("Delete user?").confirmModal()
+    modalUtils.checkModalTitle('Delete user?').confirmModal()
 
-    masthead.checkNotificationMessage("The user has been deleted")
+    masthead.checkNotificationMessage(
+      'The user has been deleted',
+    )
     sidebarPage.waitForPageLoad()
 
     listingPage.itemExist(itemIdWithCred, false)

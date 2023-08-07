@@ -1,56 +1,59 @@
 export default class CreateRealmPage {
-  private clearBtn = ".pf-c-file-upload__file-select button:last-child";
-  private modalClearBtn = "clear-button";
-  private realmNameInput = "#kc-realm-name";
+  private clearBtn =
+    '.pf-c-file-upload__file-select button:last-child'
+  private modalClearBtn = 'clear-button'
+  private realmNameInput = '#kc-realm-name'
   private enabledSwitch =
-    '[for="kc-realm-enabled-switch"] span.pf-c-switch__toggle';
-  private createBtn = '.pf-c-form__group:last-child button[type="submit"]';
-  private cancelBtn = '.pf-c-form__group:last-child button[type="button"]';
-  private codeEditor = ".pf-c-code-editor__code";
+    '[for="kc-realm-enabled-switch"] span.pf-c-switch__toggle'
+  private createBtn =
+    '.pf-c-form__group:last-child button[type="submit"]'
+  private cancelBtn =
+    '.pf-c-form__group:last-child button[type="button"]'
+  private codeEditor = '.pf-c-code-editor__code'
 
   fillRealmName(realmName: string) {
-    cy.get(this.realmNameInput).clear().type(realmName);
+    cy.get(this.realmNameInput).clear().type(realmName)
 
-    return this;
+    return this
   }
 
   fillCodeEditor() {
-    cy.get(this.codeEditor).click().type("clear this field");
+    cy.get(this.codeEditor).click().type('clear this field')
 
-    return this;
+    return this
   }
 
   createRealm() {
-    cy.get(this.createBtn).click();
+    cy.get(this.createBtn).click()
 
-    return this;
+    return this
   }
 
   disableRealm() {
-    cy.get(this.enabledSwitch).click();
+    cy.get(this.enabledSwitch).click()
 
-    return this;
+    return this
   }
 
   cancelRealmCreation() {
-    cy.get(this.cancelBtn).click();
+    cy.get(this.cancelBtn).click()
 
-    return this;
+    return this
   }
 
   clearTextField() {
-    cy.get(this.clearBtn).click();
-    cy.findByTestId(this.modalClearBtn).click();
+    cy.get(this.clearBtn).click()
+    cy.findByTestId(this.modalClearBtn).click()
 
-    return this;
+    return this
   }
 
   verifyRealmNameFieldInvalid() {
     cy.get(this.realmNameInput)
-      .next("div")
-      .contains("Required field")
-      .should("have.class", "pf-m-error");
+      .next('div')
+      .contains('Required field')
+      .should('have.class', 'pf-m-error')
 
-    return this;
+    return this
   }
 }
