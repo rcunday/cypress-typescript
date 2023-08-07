@@ -164,21 +164,53 @@ describe('User Creation', () => {
     })
   })
 
-  it("Add user to groups test", () => {
+  it('Add user to groups test', () => {
     // Go to user groups
-    listingPage.searchItem(itemId).itemExist(itemId);
-    listingPage.goToItemDetails(itemId);
+    listingPage.searchItem(itemId).itemExist(itemId)
+    listingPage.goToItemDetails(itemId)
 
-    userGroupsPage.goToGroupsTab();
-    userGroupsPage.toggleAddGroupModal();
+    userGroupsPage.goToGroupsTab()
+    userGroupsPage.toggleAddGroupModal()
 
-    const groupsListCopy = groupsList.slice(0, 3);
+    const groupsListCopy = groupsList.slice(0, 3)
 
     groupsListCopy.forEach((element) => {
-      cy.findByTestId(`${element}-check`).click();
-    });
+      cy.findByTestId(`${element}-check`).click()
+    })
 
-    userGroupsPage.joinGroups();
-  });
+    userGroupsPage.joinGroups()
+  })
 
+  it('Leave group test', () => {
+    listingPage.searchItem(itemId).itemExist(itemId)
+    listingPage.goToItemDetails(itemId)
+    // Go to user groups
+    userGroupsPage.goToGroupsTab()
+    cy.findByTestId(`leave-${groupsList[0]}`).click()
+    cy.findByTestId('confirm').click({ force: true })
+  })
+
+  it('search and leave group', () => {
+    listingPage.searchItem(itemId).itemExist(itemId)
+    listingPage.goToItemDetails(itemId)
+    userGroupsPage.goToGroupsTab()
+
+    listingPage.searchItem('group')
+    userGroupsPage.leaveGroupButtonDisabled()
+
+    listingPage.clickTableHeaderItemCheckboxAllRows()
+    userGroupsPage.leaveGroupButtonEnabled()
+    userGroupsPage.leaveGroup()
+  })
+
+  it('Go to user consents test', () => {
+    listingPage.searchItem(itemId).itemExist(itemId)
+
+    sidebarPage.waitForPageLoad()
+    listingPage.goToItemDetails(itemId)
+
+    cy.findByTestId('user-consents-tab').click()
+    cy.findByTestId('empty-state').contains('No consents')
+  })
 })
+
